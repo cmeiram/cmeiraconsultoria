@@ -497,6 +497,20 @@ a:hover {
   scroll-snap-align: start;
 }
 
+/* A miniatura é um botão: abre o modal e já vem com teclado e foco de graça. */
+.shot {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: 12px;
+}
+
+.shot:hover img {
+  border-color: rgba(242, 177, 52, 0.55);
+}
+
 .strip img {
   height: clamp(300px, 60vw, 460px);
   width: auto;
@@ -536,6 +550,66 @@ a:hover {
 
 .arrow-next {
   right: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Modal da foto ampliada
+   -------------------------------------------------------------------------- */
+.lightbox {
+  padding: 0;
+  border: 0;
+  background: none;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+
+.lightbox::backdrop {
+  background: rgba(8, 8, 11, 0.86);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.lightbox img {
+  max-width: 92vw;
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--color-divider);
+  background: var(--color-surface);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 239, 230, 0.32);
+  background: var(--color-bg);
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.lightbox-close:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+/* Em telas estreitas o botão não cabe fora da foto; joga para dentro. */
+@media (max-width: 520px) {
+  .lightbox-close {
+    top: 8px;
+    right: 8px;
+  }
 }
 
 /* --------------------------------------------------------------------------

@@ -43,6 +43,18 @@ function findTarget(stops, current, direction, maxScroll) {
 }
 
 /**
+ * Respeita a preferência do sistema por menos movimento.
+ *
+ * A opção `behavior` do scrollTo sobrescreve o `scroll-behavior` do CSS, então a
+ * regra de mídia da folha de estilo não basta — precisa ser consultada aqui.
+ *
+ * @returns {ScrollBehavior}
+ */
+function preferredBehavior() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
+/**
  * Move a faixa em um item.
  *
  * @param {HTMLElement} strip
@@ -50,7 +62,7 @@ function findTarget(stops, current, direction, maxScroll) {
  */
 export function scrollByItem(strip, direction) {
   const target = findTarget(getStops(strip), strip.scrollLeft, direction, strip.scrollWidth);
-  strip.scrollTo({ left: target, behavior: "smooth" });
+  strip.scrollTo({ left: target, behavior: preferredBehavior() });
 }
 
 /**
