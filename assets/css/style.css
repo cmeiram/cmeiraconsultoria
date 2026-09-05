@@ -1,0 +1,597 @@
+/* ==========================================================================
+   CMeira Consultoria — folha de estilo única
+   Ordem: fontes → tokens → base → layout → componentes → breakpoints
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fontes (subsets latin e latin-ext; PT-BR não precisa de cyrillic/vietnamese)
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/Archivo-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/Archivo-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("../fonts/Playfair-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("../fonts/Playfair-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* --------------------------------------------------------------------------
+   Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  --color-bg: #0f0f13;
+  --color-surface: #191920;
+  --color-text: #f4efe6;
+  --color-text-soft: #d8d2c7;
+  --color-text-dim: #c9c3b8;
+  --color-muted: #a6a19a;
+  --color-divider: rgba(244, 239, 230, 0.14);
+  --color-accent: #c8102e;
+  --color-accent-600: #a80d26;
+  --color-accent-700: #8a0b20;
+  --color-accent-100: rgba(200, 16, 46, 0.14);
+  --color-accent-2: #f2b134;
+
+  --font-heading: "Playfair Display", "Times New Roman", serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+
+  --gutter: clamp(18px, 5vw, 48px);
+  --gap-section: clamp(20px, 3vw, 32px);
+  --radius-card: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  /* Base herdada por quem não define a sua: mantém a altura do badge e afins. */
+  font-size: 15px;
+  line-height: 1.55;
+  overflow-x: hidden;
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+figure {
+  margin: 0;
+}
+
+a {
+  color: var(--color-accent-2);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #f7d372;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-2);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(242, 177, 52, 0.32);
+}
+
+/* Visível apenas para leitores de tela. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Layout
+   -------------------------------------------------------------------------- */
+
+/* Fundo em camadas: ::before são os halos de cor, ::after a textura riscada. */
+.abs-bg {
+  position: relative;
+  isolation: isolate;
+}
+
+.abs-bg::before,
+.abs-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.abs-bg::before {
+  background:
+    radial-gradient(120% 80% at 10% -8%, rgba(200, 16, 46, 0.42) 0%, rgba(200, 16, 46, 0) 58%),
+    radial-gradient(90% 60% at 104% 12%, rgba(224, 99, 29, 0.3) 0%, rgba(224, 99, 29, 0) 60%),
+    radial-gradient(80% 55% at 50% 108%, rgba(242, 177, 52, 0.2) 0%, rgba(242, 177, 52, 0) 62%),
+    radial-gradient(60% 40% at 88% 72%, rgba(200, 16, 46, 0.16) 0%, rgba(200, 16, 46, 0) 64%);
+}
+
+.abs-bg::after {
+  background:
+    repeating-linear-gradient(118deg, rgba(244, 239, 230, 0.035) 0 1px, rgba(244, 239, 230, 0) 1px 34px),
+    repeating-linear-gradient(62deg, rgba(242, 177, 52, 0.03) 0 1px, rgba(242, 177, 52, 0) 1px 58px);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(44px, 7vw, 88px);
+}
+
+/* Respiro vertical da página; o <main> reaproveita só o .stack. */
+.stack-page {
+  padding: clamp(28px, 6vw, 64px) 0 clamp(48px, 8vw, 88px);
+}
+
+/* Empilhamento vertical padrão de uma seção. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+}
+
+.section-center {
+  align-items: center;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Tipografia
+   -------------------------------------------------------------------------- */
+.h-sec {
+  margin: 0;
+  font-size: clamp(24px, 4.4vw, 38px);
+  line-height: 1.14;
+}
+
+.h-sec em {
+  font-style: normal;
+  color: var(--color-accent-2);
+}
+
+.p-body {
+  margin: 0;
+  font-size: clamp(14.5px, 1.6vw, 16.5px);
+  line-height: 1.65;
+  color: var(--color-text-dim);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Cabeçalho
+   -------------------------------------------------------------------------- */
+.site-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.site-header h1 {
+  margin: 0;
+}
+
+/* Medida de leitura confortável para o texto de abertura. */
+.site-header .p-body {
+  max-width: 34ch;
+}
+
+.logo {
+  width: clamp(170px, 34vw, 260px);
+  height: auto;
+}
+
+.badge {
+  font-size: clamp(10.5px, 1.3vw, 12px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #16160f;
+  background: var(--color-accent-2);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Como funciona
+   -------------------------------------------------------------------------- */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(20px, 3vw, 30px);
+  grid-template-columns: 1fr;
+  counter-reset: step;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 16px;
+  counter-increment: step;
+}
+
+/* O número vem do contador — a ordem já está no <ol>, não se repete no markup. */
+.step-n::before {
+  content: counter(step);
+}
+
+.step-n {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--color-accent-100);
+  border: 1px solid rgba(200, 16, 46, 0.5);
+  color: var(--color-accent-2);
+  font-family: var(--font-heading);
+  font-size: 19px;
+  display: grid;
+  place-items: center;
+}
+
+.step h3 {
+  margin: 0 0 4px;
+  font-size: clamp(16.5px, 2vw, 20px);
+  line-height: 1.2;
+}
+
+/* --------------------------------------------------------------------------
+   Investimento
+   -------------------------------------------------------------------------- */
+.plans {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+.plan {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.plan-hi {
+  border-color: rgba(242, 177, 52, 0.5);
+}
+
+.plan-name {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.plan-hi .plan-name {
+  color: var(--color-accent-2);
+}
+
+.plan-price {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(21px, 2.6vw, 30px);
+  white-space: nowrap;
+}
+
+.plan-note {
+  font-size: 11.5px;
+  color: var(--color-muted);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 3vw, 24px);
+}
+
+.card {
+  border-radius: var(--radius-card);
+  padding: clamp(18px, 2.6vw, 26px);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-included {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  gap: 16px;
+}
+
+.card-cta {
+  background: var(--color-accent-100);
+  border: 1px solid rgba(200, 16, 46, 0.4);
+  gap: 14px;
+}
+
+.card-cta .p-body {
+  color: #e9e3d8;
+}
+
+.incl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.incl li {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 12px;
+  font-size: clamp(14px, 1.6vw, 16px);
+  line-height: 1.55;
+  color: var(--color-text-soft);
+}
+
+.incl svg {
+  color: var(--color-accent-2);
+  margin-top: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Botões
+   -------------------------------------------------------------------------- */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--color-accent);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  font: 600 clamp(14px, 1.7vw, 16px) var(--font-body);
+  padding: 16px 30px;
+  min-height: 52px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.cta:hover {
+  background: var(--color-accent-600);
+  color: #fff;
+}
+
+.cta:active {
+  background: var(--color-accent-700);
+}
+
+.cta-block {
+  display: flex;
+  width: 100%;
+}
+
+.cta-wide {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Carrossel de resultados
+   -------------------------------------------------------------------------- */
+.results {
+  gap: clamp(18px, 2.6vw, 28px);
+}
+
+.results .h-sec {
+  max-width: 20ch;
+}
+
+.carousel {
+  position: relative;
+  /* Sangra até a borda da viewport, anulando o padding do .wrap. */
+  margin-left: calc(-1 * var(--gutter));
+  margin-right: calc(-1 * var(--gutter));
+}
+
+.strip {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: var(--gutter);
+  overscroll-behavior-x: contain;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.strip figure {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+.strip img {
+  height: clamp(300px, 60vw, 460px);
+  width: auto;
+  max-width: none;
+  border-radius: 12px;
+  border: 1px solid var(--color-divider);
+  background: var(--color-surface);
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 239, 230, 0.32);
+  background: rgba(15, 15, 19, 0.66);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--color-text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42);
+  transition: background 0.18s ease;
+}
+
+.arrow:hover {
+  background: rgba(15, 15, 19, 0.9);
+}
+
+.arrow-prev {
+  left: 10px;
+}
+
+.arrow-next {
+  right: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Rodapé
+   -------------------------------------------------------------------------- */
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-top: clamp(20px, 3vw, 32px);
+  border-top: 1px solid var(--color-divider);
+}
+
+.social {
+  display: flex;
+  gap: 12px;
+}
+
+.social a {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--color-divider);
+  display: grid;
+  place-items: center;
+  color: var(--color-text);
+}
+
+.social a:hover {
+  background: rgba(244, 239, 230, 0.08);
+  color: var(--color-accent-2);
+}
+
+/* --------------------------------------------------------------------------
+   Breakpoints
+   -------------------------------------------------------------------------- */
+@media (min-width: 620px) {
+  .plans {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .steps {
+    grid-template-columns: 1fr 1fr;
+    gap: 34px 44px;
+  }
+
+  .plans {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+    gap: 56px;
+    align-items: start;
+  }
+}
